@@ -126,7 +126,8 @@ foreach ($boards as $id => $board) {
             $i = 1;
             foreach ($attachments as $url => $name) {
                 $pathForAttachment = $dirname . '/' . sanitize_file_name($name);
-                file_put_contents($pathForAttachment, file_get_contents($url));
+				
+				copy($url, $pathForAttachment);
                 echo "\t" . $i++ . ") " . $name . " in " . $pathForAttachment . "\n";
             }
         }
