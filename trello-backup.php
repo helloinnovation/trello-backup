@@ -98,6 +98,9 @@ echo count($boards) . " boards to backup... \n";
 foreach ($boards as $id => $board) {
     $url_individual_board_json = "https://api.trello.com/1/boards/$id?actions=all&actions_limit=1000&card_attachment_fields=all&cards=all&lists=all&members=all&member_fields=all&card_attachment_fields=all&checklists=all&fields=all&key=$key&token=$application_token";
     $dirname = getPathToStoreBackups($path, $board, $filename_append_datetime);
+	if (!file_exists($dirname)) {
+		mkdir($dirname, 0777, true);
+	}
     $filename = $dirname . '.json';
     echo "recording " . (($board->closed) ? 'the closed ' : '') . "board '" . $board->name . "' " . (empty($board->orgName) ? "" : "(within organization '" . $board->orgName . "')") . " in filename $filename ...\n";
     $response = file_get_contents($url_individual_board_json, false, $ctx);
@@ -120,9 +123,6 @@ foreach ($boards as $id => $board) {
         if(!empty($attachments)) {
             echo "\t" . count($attachments) . " attachments will now be downloaded and backed up...\n";
 
-            if (!file_exists($dirname)) {
-                mkdir($dirname, 0777, true);
-            }
             $i = 1;
             foreach ($attachments as $url => $name) {
                 $pathForAttachment = $dirname . '/' . sanitize_file_name($name);
@@ -142,11 +142,11 @@ echo "your Trello boards are now safely downloaded!\n";
  * @return string
  */
 function getPathToStoreBackups($path, $board, $filename_append_datetime)
-{
-    return "$path/trello"
-    . (($board->closed) ? '-CLOSED' : '')
-    . (!empty($board->orgName) ? '-org-' . sanitize_file_name($board->orgName) : '')
-    . '-board-' . sanitize_file_name($board->name)
+{	
+	return "$path/"
+    . (!empty($board->orgName) ? sanitize_file_name($board->orgName) . '/' : '')
+    . sanitize_file_name($board->name)
+	. (($board->closed) ? ' (Closed)' : '')
     . (($filename_append_datetime) ? '-' . date($filename_append_datetime, time()) : '');
 }
 
