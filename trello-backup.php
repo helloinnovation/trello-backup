@@ -163,9 +163,8 @@ function getPathToStoreBackups($path, $board, $filename_append_datetime)
  */
 function sanitize_file_name($filename)
 {
-    $special_chars = array("?", "[", "]", "/", "\\", "=", "<", ">", ":", ";", ",", "'", "\"", "&", "$", "#", "*", "(", ")", "|", "~", "`", "!", "{", "}");
+    $special_chars = array("?", "/", "\\", "<", ">", ":", "\"", "$", "*", "|");
     $filename = str_replace($special_chars, '', $filename);
-    $filename = preg_replace('/[\s-]+/', '-', $filename);
     $filename = trim($filename, '.-_');
     return $filename;
 }
