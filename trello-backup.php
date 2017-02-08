@@ -125,7 +125,15 @@ foreach ($boards as $id => $board) {
 
             $i = 1;
             foreach ($attachments as $url => $name) {
+			
+				//TODO: handle links to external websites. Most likely we want a real link, not the HTML content of the webpage
+				//if (stripos($name, 'http://') === 0 || stripos($name, 'https://') === 0) {
+
                 $pathForAttachment = $dirname . '/' . sanitize_file_name($name);
+				//TODO: handle paths too long
+				
+				if (file_exists($pathForAttachment))
+					continue;
 				
 				copy($url, $pathForAttachment);
                 echo "\t" . $i++ . ") " . $name . " in " . $pathForAttachment . "\n";
