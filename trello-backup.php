@@ -129,8 +129,20 @@ foreach ($boards as $id => $board) {
 				//TODO: handle links to external websites. Most likely we want a real link, not the HTML content of the webpage
 				//if (stripos($name, 'http://') === 0 || stripos($name, 'https://') === 0) {
 
-                $pathForAttachment = $dirname . '/' . sanitize_file_name($name);
-				//TODO: handle paths too long
+				$sanitizedName = sanitize_file_name($name);
+                $pathForAttachment = $dirname . '/' . $sanitizedName;
+				
+				//handle paths too long
+				if (isset($max_path_length) && strlen($pathForAttachment) > $max_path_length) {
+					if (preg_match('/.+(\..{1,10})/', $sanitizedName, $matches) == 1)
+						$extension = $matches[1];
+					else
+						$extension = '';
+					$maxNameLength = $max_path_length - strlen($dirname) - 1;
+					$shortenedName = substr($sanitizedName, 0, $maxNameLength - strlen($extension));
+					
+					$pathForAttachment = $dirname . '/' . $shortenedName . $extension;
+				}
 				
 				if (file_exists($pathForAttachment))
 					continue;

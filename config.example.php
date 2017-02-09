@@ -30,3 +30,8 @@ $ignore_organizations = array('Organization Name To Ignore');
 
 // Timestamp format, e.g. 'Y-m-d_H-i-s'
 $filename_append_datetime = false;
+
+// We all love windows, don't we?
+$max_path_length = 259;
+
+?>
