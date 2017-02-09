@@ -74,7 +74,7 @@ if ($backup_all_organization_boards) {
     }
 }
 
-// 4) Only backup the "open" boards
+// 4) Filter boards to backup (Open/Closed, by board name, by organization name)
 $boards = array();
 foreach ($boardsInfo as $board) {
     if (!$backup_closed_boards && $board->closed) {
@@ -84,10 +84,15 @@ foreach ($boardsInfo as $board) {
     if (isset($ignore_boards) && in_array($board->name, $ignore_boards)) {
         continue;
     }
+	
+	$orgName = (isset($organizations[$board->idOrganization]) ? $organizations[$board->idOrganization] : '');
+	if (isset($ignore_organizations) && in_array($orgName, $ignore_organizations)) {
+		continue;
+	}
 
     $boards[$board->id] = (object)array(
         "name" => $board->name,
-        "orgName" => (isset($organizations[$board->idOrganization]) ? $organizations[$board->idOrganization] : ''),
+        "orgName" => $orgName,
         "closed" => (($board->closed) ? true : false)
     );
 }
