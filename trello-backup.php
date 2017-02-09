@@ -188,14 +188,9 @@ function getPathToStoreBackups($path, $board, $filename_append_datetime)
 }
 
 /**
- * Found in Wordpress:
- *
- * Sanitizes a filename replacing whitespace with dashes
  *
  * Removes special characters that are illegal in filenames on certain
- * operating systems and special characters requiring special escaping
- * to manipulate at the command line. Replaces spaces and consecutive
- * dashes with a single dash. Trim period, dash and underscore from beginning
+ * operating systems. Trim period, space, dash and underscore from beginning
  * and end of filename.
  *
  * @param string $filename The filename to be sanitized
@@ -205,6 +200,6 @@ function sanitize_file_name($filename)
 {
     $special_chars = array("?", "/", "\\", "<", ">", ":", "\"", "$", "*", "|");
     $filename = str_replace($special_chars, '', $filename);
-    $filename = trim($filename, '.-_');
+    $filename = trim($filename, '.-_ ');
     return $filename;
 }
